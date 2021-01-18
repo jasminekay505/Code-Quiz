@@ -5,3 +5,6 @@
     background-color: blueviolet;
     border:blueviolet;
 }
+#currentTime{
+    float:right;
+}
