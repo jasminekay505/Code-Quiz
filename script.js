@@ -25,25 +25,37 @@ startTimer.addEventListener ("click", function () {
         timer.textContent = "Time: " + secondsLeft;
         if (secondsLeft <= 0) { 
             clearInterval(timerInterval);
-            timer.textContent = "Time's Up!";
+            timer.textContent = "You're out of time!!";
         }
     }, 1000);
-})
 
-function generateQuiz (questions, quizContainer, resultsContainer, submitButton) {
-    
-    function showQuestions (questions, quizContainer) { 
-        //Clear data
-        questionsDiv.innerHTML = "";
-        ul
+   render();
+});
+
+
+var quiz = document.querySelector("#quiz");
+var question = document.querySelector("#question");
+var ulCreate = document.createElement("ul");
+//Render question and choices to page
+function render () { 
+    //Clear previous content
+    quiz.innerHTML = "";
+    ulCreate.innerHTML = "";
+
+    //For loop to go through questions
+    for (var i = 0; i < questions.length; i ++) { 
+        var newQuestion = questions[i].question;
+        quiz.textContent = newQuestion;
+
+        var choices = questions[i].choices;
     }
-    function showResults (questions, quizContainer, resultsContainer) {
-
-    }
-
-    showQuestions(questions, quizContainer);
-
-    submitButton.onclick = function () {
-        showResults(questions, quizContainer, resultsContainer);
-    }
+        choices.forEach(function (newChoice) {
+            var listItem = document.createElement("li");
+            listItem.textContent = newChoice;
+            quiz.appendChild(ulCreate);
+            ulCreate.appendChild(listItem);
+            listItem.addEventListener("click", (compare));
+        })  
 }
+
+
