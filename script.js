@@ -1,4 +1,3 @@
-//Initialize variables
 //Initialize index so that game begins with first question in questions array
 var questionIndex = 0;
 //Initialize game with a score of 0
@@ -18,16 +17,39 @@ var questions = [
         question: "The condition in an if/else statement is enclosed within ___.",
         choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
         answer: "parentheses"
-    }
+    },
+    {
+        title: "Arrays in Javascript can be used to store ____.",
+        choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
+        answer: "all of the above"
+    },
+    {
+        title: "String values must be enclosed within ____ when being assigned to variables.",
+        choices: ["commas", "curly brackets", "quotes", "parenthesis"],
+        answer: "quotes"
+    },
+    {
+        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        choices: ["Javascript", "terminal / bash", "for loops", "console log"],
+        answer: "console log"
+    },
 ];
 //Select html to use in functions later
 //Select HTML timer elements
 var timer = document.querySelector("#timer");
 var startTimer = document.querySelector("#start");
-//Select HTML quiz element
+//Select HTML elements so they can be used in functions
+var welcome = document.querySelector("#welcome");
 var quiz = document.querySelector("#quiz");
-//Select HTML choices element 
-var newChoices = document.querySelector("#choices");
+var gameOver = document.querySelector("#gameOver");
+var highScore = document.querySelector("#highScore");
+var scores = document.querySelector("#scores");
+var question = document.querySelector("#question");
+var scoreIndicator = document.querySelector("#scoreIndicator");
+var finalScore = document.querySelector("#finalScore");
+var records = document.querySelector("#records");
+var initials = document.querySelector("#initials");
+var goBack = document.querySelector("#goBack");
 
 
 //Start Timer
