@@ -29,15 +29,49 @@
         </div>
         <!-- Row for main content of the game -->
         <div class="row" >
-            <div class="card" id = "quiz">
+            <!-- Create HTML Content for Welcome Card -->
+            <div class="card" id = "welcome" class = "visible">
                 <img src="Assets/Coding-Quiz-Time.jpg" class="card-img-top" alt="Quiz Time">
                 <div class="card-body">
                   <h5 class="card-title">Coding Quiz</h5>
                   <p class="card-text">Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score time by ten seconds!</p>
-                  <ul id="choices"></ul>
                   <button class="btn btn-primary" id = "start">Start Quiz</button>
                 </div>
-              </div>
+            </div>
+            <!-- Create HTML Content for Quiz Card -->
+            <div class="card" id = "quiz" class = "hidden">
+                <div class="card-body">
+                  <h5 class="card-title" id = "question"></h5>
+                  <button class="btn btn-primary"></button></button>
+                  <button class="btn btn-primary"></button></button>
+                  <button class="btn btn-primary"></button></button>
+                  <button class="btn btn-primary"></button></button>
+                  <p class ="card-text" class="hidden" id ="scoreIndicator"></p>
+                </div>
+            </div>
+            <!-- Create HTML Content for Game Over -->
+            <div class="card" id = "gameOver" class = "hidden">
+                <div class="card-body">
+                    <h5 class="card-title">Game Over</h5>
+                    <p class="card-text" id = "final score"></p>
+                    <button class="btn btn-primary" id = "start">Start Quiz</button>
+                    <div id="records">
+                        <p class ="card-text">Enter initials: </p><input id="initials" type="text">
+                        <button class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Create HTML Content for High Scores -->
+            <div class="card" id = "highScore" class = "hidden">
+                <img src="Assets/Coding-Quiz-Time.jpg" class="card-img-top" alt="Quiz Time">
+                <div class="card-body">
+                  <h5 class="card-title">High Scores</h5>
+                  <div>
+
+                  </div>
+                  <button class="btn btn-primary" id = "goBack">Go Back</button> <button class="btn btn-primary" id="clearScores">Clear Highscores</button>
+                </div>
+            </div>
         </div>
     </div>
     

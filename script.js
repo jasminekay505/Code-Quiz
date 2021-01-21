@@ -78,7 +78,7 @@ function render (questionIndex) {
             listItem.addEventListener("click", (compare));
         })  
 }
-
+//Compare function checks that answer is correct
 function compare(event) { 
     var element = event.target;
     if(element.matches("li")) { 
@@ -95,10 +95,18 @@ function compare(event) {
     }
    questionIndex++;
    
-   if (questionIndex >= questions.lenth) { 
+   if (questionIndex >= questions.length) {
+       gameOver(); 
        createDiv.textContent= "End of Quiz." + "Your score is " + score + "/" + questions.length + "!";
    } else { 
        render (questionIndex);
    }
    quiz.appendChild(createDiv);
+}
+
+//Game over function changes display when game is over
+function gameOver() { 
+    //Clear previous content
+    quiz.innerHTML = "";
+    newChoices.innerHTML = "";
 }
