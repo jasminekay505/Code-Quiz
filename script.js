@@ -77,6 +77,7 @@ highScore.style.display = "none";
                 highScore.style.display = "none";
             //Stop the countdown once all questions have been shown
             } else if (questionIndex === questions.length) {
+                clearInterval(timerInterval);
                 timer.textContent = "Game Over!!";
             }
         }, 1000);
@@ -139,7 +140,7 @@ function compare(event) {
    quiz.appendChild(responseDiv);
 }
 
-//Game over function changes display when game is over
+//Game over function changes display when game is over and collects initials
 function endGame() { 
     //Set up HTML to only show gameOver content
     welcome.style.display = "none";
@@ -149,19 +150,29 @@ function endGame() {
     timer.textContent = "";
     finalScore.textContent = "End of Quiz. " + "Your score is " + score + "/" + questions.length + "!";
     submit.addEventListener("click", (function () { 
-       //Set up HTML to only show Score content
-        welcome.style.display = "none";
-        quiz.style.display = "none";
-        gameOver.style.display = "none";
-        highScore.style.display = "block"; 
+       showScores();
+
     })
     );
 }
 
+//showScores function shows the high scores when the button is pressed
 function showScores () {
     //Set up HTML to only show Score content
     welcome.style.display = "none";
     quiz.style.display = "none";
     gameOver.style.display = "none";
     highScore.style.display = "block";
+    //When user click go back, the quiz starts over
+    goBack.addEventListener("click", function () {
+        //Set up HTML to only show quiz content
+        welcome.style.display = "block";
+        quiz.style.display = "none";
+        gameOver.style.display = "none";
+        highScore.style.display = "none";
+        //reset variables
+        questionIndex = 0;
+        score = 0;
+        secondsLeft = 60;
+    })
 }
