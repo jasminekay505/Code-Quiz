@@ -34,6 +34,11 @@ var questions = [
         answer: "console log"
     },
 ];
+//Set up high score storage array
+var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
+if (!scoresFromStorage) {
+    scoresFromStorage= [];
+}
 
 //Select HTML elements so they can be used in script
 //Timer elements
@@ -138,12 +143,7 @@ function compare(event) {
     quiz.appendChild(responseDiv);
 }
 
-var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
-if (!scoresFromStorage) {
-    scoresFromStorage= [];
-}
-
-//endGame function changes display when game is over
+//End Game
 function endGame() {
     //Set up HTML to only show gameOver content
     welcome.style.display = "none";
@@ -166,43 +166,38 @@ submit.addEventListener("click", (function () {
 
     scoresFromStorage.push(newStorageEntry);
 
+    //add to local storage
     localStorage.setItem("scores", JSON.stringify(scoresFromStorage));
 
-    showScores(scoresFromStorage);
-    return scoresFromStorage;
-
+    showScores();
 })
 );
 
 
-//showScores function shows the high scores when the button is pressed
-function showScores(scoresFromStorage) {
+//show Scores
+function showScores() {
     //Set up HTML to only show Score content
     welcome.style.display = "none";
     quiz.style.display = "none";
     gameOver.style.display = "none";
     highScore.style.display = "block";
     scoreSection.innerHTML = "";
-    console.log(scoresFromStorage.length);
-    //Print high scores
-
+    
+    //Print scores
     for (var i = 0; i < scoresFromStorage.length; i++) {
         var scoreEl = document.createElement("p");
         scoreEl.innerText = scoresFromStorage[i].initials + "'s score is " + scoresFromStorage[i].score;
         scoreSection.appendChild(scoreEl)
     }
-    //Clear high scores 
-    clearScores.addEventListener("click", function () {
-    localStorage.clear();
-    scoresFromStorage.length = 0;
-    scoreSection.innerHTML = "";
-    console.log(scoresFromStorage.length)
-    showScores(scoresFromStorage)
-    return scoresFromStorage;
-})
+    
 }
 
-
+//Clear high scores 
+clearScores.addEventListener("click", function () {
+    localStorage.clear();
+    scoresFromStorage.length = 0;
+    showScores()
+})
 
 //Start quiz over
 goBack.addEventListener("click", function () {
@@ -224,5 +219,4 @@ viewScores.addEventListener("click", function () {
     quiz.style.display = "none";
     gameOver.style.display = "none";
     highScore.style.display = "block";
-    console.log(scoresFromStorage.length)
 })
