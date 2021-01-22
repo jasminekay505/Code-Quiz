@@ -109,7 +109,7 @@ function renderQuiz () {
     var choices = questions[questionIndex].choices;
     for (var i = 0; i < choices.length; i++) { 
         var choicesEl = document.createElement("button");
-        choicesEl.setAttribute("class", "btn btn-primary");
+        choicesEl.setAttribute("class", "btn btn-primary choices");
         quiz.appendChild(choicesEl);
         choicesEl.textContent = choices[i];
         choicesEl.addEventListener("click", (compare));
@@ -150,6 +150,15 @@ function endGame() {
     timer.textContent = "";
     finalScore.textContent = "End of Quiz. " + "Your score is " + score + "/" + questions.length + "!";
     submit.addEventListener("click", (function () { 
+       var newInitials = initials.value;
+       var newScore = score;
+       
+       var newStorageEntry = {
+           initials: newInitials,
+           score: newScore
+       }
+
+       console.log(newStorageEntry)
        showScores();
 
     })

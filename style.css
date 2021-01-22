@@ -13,3 +13,9 @@
 .card-img-top{
     max-width: 300px;
 }
+.choices { 
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+}
