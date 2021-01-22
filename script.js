@@ -52,6 +52,8 @@ var records = document.querySelector("#records");
 var initials = document.querySelector("#initials");
 var submit = document.querySelector("#submit");
 var goBack = document.querySelector("#goBack");
+var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
+var scoreSection = document.querySelector("#score-section");
 
 //Set up html to show welcome content
 welcome.style.display = "block";
@@ -156,9 +158,12 @@ function endGame() {
        var newStorageEntry = {
            initials: newInitials,
            score: newScore
-       }
+       };
 
-       console.log(newStorageEntry)
+       scoresFromStorage.push(newStorageEntry);
+       localStorage.setItem("scores", JSON.stringify(scoresFromStorage));
+       console.log(newStorageEntry);
+       console.log(scoresFromStorage);
        showScores();
 
     })
@@ -172,6 +177,12 @@ function showScores () {
     quiz.style.display = "none";
     gameOver.style.display = "none";
     highScore.style.display = "block";
+    //Print high scores
+    for (var i=0; i < scoresFromStorage.length; i++) { 
+        var scoreEl = document.createElement("p");
+        scoreEl.innerText = scoresFromStorage[i].initials + "'s score is " + scoresFromStorage[i].score;
+        scoreSection.appendChild(scoreEl)
+    }
     //When user click go back, the quiz starts over
     goBack.addEventListener("click", function () {
         //Set up HTML to only show quiz content
