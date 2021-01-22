@@ -34,10 +34,11 @@ var questions = [
         answer: "console log"
     },
 ];
+
 //Set up high score storage array
 var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
 if (!scoresFromStorage) {
-    scoresFromStorage= [];
+    scoresFromStorage = [];
 }
 
 //Select HTML elements so they can be used in script
@@ -79,7 +80,7 @@ startTimer.addEventListener("click", function () {
             quiz.style.display = "none";
             gameOver.style.display = "block";
             highScore.style.display = "none";
-        //Stop the countdown once all questions have been shown
+            //Stop the countdown once all questions have been shown
         } else if (questionIndex === questions.length) {
             clearInterval(timerInterval);
             timer.textContent = "Game Over!!";
@@ -182,14 +183,14 @@ function showScores() {
     gameOver.style.display = "none";
     highScore.style.display = "block";
     scoreSection.innerHTML = "";
-    
+
     //Print scores
     for (var i = 0; i < scoresFromStorage.length; i++) {
         var scoreEl = document.createElement("p");
         scoreEl.innerText = scoresFromStorage[i].initials + "'s score is " + scoresFromStorage[i].score;
         scoreSection.appendChild(scoreEl)
     }
-    
+
 }
 
 //Clear high scores 
