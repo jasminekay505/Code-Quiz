@@ -54,7 +54,7 @@ var goBack = document.querySelector("#goBack");
 
 //Set up html to show welcome content
 welcome.style.display = "block";
-quiz.style.display = "none";
+quiz.style.visibility = "hidden";
 gameOver.style.display = "none";
 highScore.style.display = "none";
 
@@ -82,7 +82,7 @@ highScore.style.display = "none";
 function render (questionIndex) {
     //Set up HTML to only show quiz content
     welcome.style.display = "none";
-    quiz.style.display = "block";
+    quiz.style.visibility = "visible";
     gameOver.style.display = "none";
     highScore.style.display = "none"; 
     
@@ -111,21 +111,20 @@ function render (questionIndex) {
 //Compare function checks that answer is correct
 function compare(event) { 
     var element = event.target;
-    if(element.matches("li")) { 
+    if(element.matches("button")) { 
         var createDiv = document.createElement("div");
-        createDiv.setAttribute("id", "createDiv");
 
-        if(element.textContent == questions[questionIndex].answer) {
+        if (element.textContent == questions[questionIndex].answer) {
             score ++;
             createDiv.textContent = "Correct! The answer is: " + questions[questionIndex].answer;
         } else {
             secondsLeft = secondsLeft - penalty;
-            createDiv.textContent = "Incorrect! The correct answer is :" + question[questionIndex].answer;
+            createDiv.textContent = "Incorrect! The correct answer is: " + questions[questionIndex].answer;
         }
     }
    questionIndex++;
    
-   if (questionIndex >= questions.length) {
+   if (questionIndex >= questions.length || secondsLeft <= 0) {
        endGame(); 
        createDiv.textContent= "End of Quiz." + "Your score is " + score + "/" + questions.length + "!";
    } else { 
@@ -136,7 +135,9 @@ function compare(event) {
 
 //Game over function changes display when game is over
 function endGame() { 
-    //Clear previous content
-    quiz.innerHTML = "";
-    newChoices.innerHTML = "";
+    //Set up HTML to only show gameOver content
+    welcome.style.display = "none";
+    quiz.style.display = "none";
+    gameOver.style.display = "block";
+    highScore.style.display = "none"; 
 }
