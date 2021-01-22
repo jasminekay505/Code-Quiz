@@ -6,6 +6,7 @@ var score = 0;
 var secondsLeft = 60;
 //Define timer penalty for incorrect answer
 var penalty = 10;
+
 //Set up array with question objects
 var questions = [
     {
@@ -19,26 +20,26 @@ var questions = [
         answer: "parentheses"
     },
     {
-        title: "Arrays in Javascript can be used to store ____.",
+        question: "Arrays in Javascript can be used to store ____.",
         choices: ["numbers and strings", "other arrays", "booleans", "all of the above"],
         answer: "all of the above"
     },
     {
-        title: "String values must be enclosed within ____ when being assigned to variables.",
+        question: "String values must be enclosed within ____ when being assigned to variables.",
         choices: ["commas", "curly brackets", "quotes", "parenthesis"],
         answer: "quotes"
     },
     {
-        title: "A very useful tool for used during development and debugging for printing content to the debugger is:",
+        question: "A very useful tool for used during development and debugging for printing content to the debugger is:",
         choices: ["Javascript", "terminal / bash", "for loops", "console log"],
         answer: "console log"
     },
 ];
-//Select html to use in functions later
+
 //Select HTML timer elements
 var timer = document.querySelector("#timer");
 var startTimer = document.querySelector("#start");
-//Select HTML elements so they can be used in functions
+//Select HTML elements so they can be used in script
 var welcome = document.querySelector("#welcome");
 var quiz = document.querySelector("#quiz");
 var gameOver = document.querySelector("#gameOver");
@@ -51,6 +52,11 @@ var records = document.querySelector("#records");
 var initials = document.querySelector("#initials");
 var goBack = document.querySelector("#goBack");
 
+//Set up html to show welcome content
+welcome.style.display = "block";
+quiz.style.display = "none";
+gameOver.style.display = "none";
+highScore.style.display = "none";
 
 //Start Timer
     //Event listener to start timer when button is clicked
@@ -71,34 +77,36 @@ var goBack = document.querySelector("#goBack");
     });
 //End Timer
 
+
 //Render function prints questions and choices
-function render (questionIndex) { 
+function render (questionIndex) {
+    //Set up HTML to only show quiz content
+    welcome.style.display = "none";
+    quiz.style.display = "block";
+    gameOver.style.display = "none";
+    highScore.style.display = "none"; 
+    
     //Clear previous content
     quiz.innerHTML = "";
-    newChoices.innerHTML = "";
 
-    //For loop to go through questions
-    for (var i = 0; i < questions.length; i ++) {
-        //Set newQuestion equal to the question in the array 
-        var newQuestion = questions[questionIndex].question;
-        //Print question to the page
-        quiz.textContent = newQuestion;
-        //Set choices equal to the set of choices in the array
-        var choices = questions[questionIndex].choices;
-        //For each choice
+    var questionEl = document.createElement("h5");
+    questionEl.setAttribute("class", "card-title");
+    var currentQuestion = questions[questionIndex].question;
+    questionEl.textContent = currentQuestion;
+    
+
+    quiz.appendChild(questionEl);
+    var choices = questions[questionIndex].choices;
+    for (var i = 0; i < choices.length; i++) { 
+        var choicesEl = document.createElement("button");
+        choicesEl.setAttribute("class", "btn btn-primary");
+        quiz.appendChild(choicesEl);
+        choicesEl.textContent = choices[i];
+        choicesEl.addEventListener("click", (compare));
     }
-        choices.forEach(function (newChoice) {
-            //Create a list item
-            var listItem = document.createElement("li");
-            //Set the text content 
-            listItem.textContent = newChoice;
-            //Add ul to quiz
-            quiz.appendChild(newChoices);
-            //Add li to quiz
-            newChoices.appendChild(listItem);
-            //Add an eventListener to each item 
-            listItem.addEventListener("click", (compare));
-        })  
+    
+    
+         
 }
 //Compare function checks that answer is correct
 function compare(event) { 
@@ -118,7 +126,7 @@ function compare(event) {
    questionIndex++;
    
    if (questionIndex >= questions.length) {
-       gameOver(); 
+       endGame(); 
        createDiv.textContent= "End of Quiz." + "Your score is " + score + "/" + questions.length + "!";
    } else { 
        render (questionIndex);
@@ -127,7 +135,7 @@ function compare(event) {
 }
 
 //Game over function changes display when game is over
-function gameOver() { 
+function endGame() { 
     //Clear previous content
     quiz.innerHTML = "";
     newChoices.innerHTML = "";
