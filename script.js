@@ -50,11 +50,12 @@ var scoreIndicator = document.querySelector("#scoreIndicator");
 var finalScore = document.querySelector("#finalScore");
 var records = document.querySelector("#records");
 var initials = document.querySelector("#initials");
+var submit = document.querySelector("#submit");
 var goBack = document.querySelector("#goBack");
 
 //Set up html to show welcome content
 welcome.style.display = "block";
-quiz.style.visibility = "hidden";
+quiz.style.display = "none";
 gameOver.style.display = "none";
 highScore.style.display = "none";
 
@@ -70,32 +71,40 @@ highScore.style.display = "none";
             if (secondsLeft <= 0) { 
                 clearInterval(timerInterval);
                 timer.textContent = "You're out of time!!";
+                welcome.style.display = "none";
+                quiz.style.display = "none";
+                gameOver.style.display = "block";
+                highScore.style.display = "none";
+            //Stop the countdown once all questions have been shown
+            } else if (questionIndex === questions.length) {
+                timer.textContent = "Game Over!!";
             }
         }, 1000);
     //Prints first question after start button is pressed
-    render(questionIndex);
+    renderQuiz();
     });
 //End Timer
 
 
 //Render function prints questions and choices
-function render (questionIndex) {
+function renderQuiz () {
     //Set up HTML to only show quiz content
     welcome.style.display = "none";
-    quiz.style.visibility = "visible";
+    quiz.style.display = "block";
     gameOver.style.display = "none";
     highScore.style.display = "none"; 
     
     //Clear previous content
     quiz.innerHTML = "";
 
+    //Create element for question and print it to screen
     var questionEl = document.createElement("h5");
     questionEl.setAttribute("class", "card-title");
     var currentQuestion = questions[questionIndex].question;
     questionEl.textContent = currentQuestion;
-    
-
     quiz.appendChild(questionEl);
+
+    //Create elements for choices and pring them to the screen
     var choices = questions[questionIndex].choices;
     for (var i = 0; i < choices.length; i++) { 
         var choicesEl = document.createElement("button");
@@ -103,34 +112,31 @@ function render (questionIndex) {
         quiz.appendChild(choicesEl);
         choicesEl.textContent = choices[i];
         choicesEl.addEventListener("click", (compare));
-    }
-    
-    
-         
+    }      
 }
-//Compare function checks that answer is correct
+
+//Compare function checks that selected answer is correct
 function compare(event) { 
     var element = event.target;
     if(element.matches("button")) { 
-        var createDiv = document.createElement("div");
+        var responseDiv = document.createElement("div");
 
         if (element.textContent == questions[questionIndex].answer) {
             score ++;
-            createDiv.textContent = "Correct! The answer is: " + questions[questionIndex].answer;
+            responseDiv.textContent = "Correct! The answer is: " + questions[questionIndex].answer;
         } else {
             secondsLeft = secondsLeft - penalty;
-            createDiv.textContent = "Incorrect! The correct answer is: " + questions[questionIndex].answer;
+            responseDiv.textContent = "Incorrect! The correct answer is: " + questions[questionIndex].answer;
         }
     }
    questionIndex++;
    
    if (questionIndex >= questions.length || secondsLeft <= 0) {
        endGame(); 
-       createDiv.textContent= "End of Quiz." + "Your score is " + score + "/" + questions.length + "!";
    } else { 
-       render (questionIndex);
+       renderQuiz ();
    }
-   quiz.appendChild(createDiv);
+   quiz.appendChild(responseDiv);
 }
 
 //Game over function changes display when game is over
@@ -138,6 +144,24 @@ function endGame() {
     //Set up HTML to only show gameOver content
     welcome.style.display = "none";
     quiz.style.display = "none";
-    gameOver.style.display = "block";
-    highScore.style.display = "none"; 
+    gameOver.style.display = "inline-block";
+    highScore.style.display = "none";
+    timer.textContent = "";
+    finalScore.textContent = "End of Quiz. " + "Your score is " + score + "/" + questions.length + "!";
+    submit.addEventListener("click", (function () { 
+       //Set up HTML to only show Score content
+        welcome.style.display = "none";
+        quiz.style.display = "none";
+        gameOver.style.display = "none";
+        highScore.style.display = "block"; 
+    })
+    );
+}
+
+function showScores () {
+    //Set up HTML to only show Score content
+    welcome.style.display = "none";
+    quiz.style.display = "none";
+    gameOver.style.display = "none";
+    highScore.style.display = "block";
 }
