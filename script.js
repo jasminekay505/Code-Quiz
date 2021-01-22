@@ -2,11 +2,10 @@
 var questionIndex = 0;
 //Initialize game with a score of 0
 var score = 0;
-//define total time on timer
+//define total game time
 var secondsLeft = 60;
 //Define timer penalty for incorrect answer
 var penalty = 10;
-
 //Set up array with question objects
 var questions = [
     {
@@ -36,24 +35,25 @@ var questions = [
     },
 ];
 
-//Select HTML timer elements
+//Select HTML elements so they can be used in script
+//Timer elements
 var timer = document.querySelector("#timer");
 var startTimer = document.querySelector("#start");
-//Select HTML elements so they can be used in script
+//View high scores button
+var viewScores = document.querySelector("#viewScores");
+//Phases of the game
 var welcome = document.querySelector("#welcome");
 var quiz = document.querySelector("#quiz");
 var gameOver = document.querySelector("#gameOver");
 var highScore = document.querySelector("#highScore");
-var scores = document.querySelector("#scores");
-var question = document.querySelector("#question");
-var scoreIndicator = document.querySelector("#scoreIndicator");
+//Game over content
 var finalScore = document.querySelector("#finalScore");
-var records = document.querySelector("#records");
 var initials = document.querySelector("#initials");
 var submit = document.querySelector("#submit");
-var goBack = document.querySelector("#goBack");
-var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
+//High scores content
 var scoreSection = document.querySelector("#score-section");
+var goBack = document.querySelector("#goBack");
+var clearScores = document.querySelector("#clearScores");
 
 //Set up html to show welcome content
 welcome.style.display = "block";
@@ -61,42 +61,37 @@ quiz.style.display = "none";
 gameOver.style.display = "none";
 highScore.style.display = "none";
 
-//Start Timer
-    //Event listener to start timer when button is clicked
-    startTimer.addEventListener ("click", function () {
-        //Set up timer 
-        var timerInterval = setInterval(function () { 
-            secondsLeft--;
-            //Print time left to the screen
-            timer.textContent = "Time: " + secondsLeft;
-            //When timer reaches 0, tell the user
-            if (secondsLeft <= 0) { 
-                clearInterval(timerInterval);
-                timer.textContent = "You're out of time!!";
-                welcome.style.display = "none";
-                quiz.style.display = "none";
-                gameOver.style.display = "block";
-                highScore.style.display = "none";
-            //Stop the countdown once all questions have been shown
-            } else if (questionIndex === questions.length) {
-                clearInterval(timerInterval);
-                timer.textContent = "Game Over!!";
-            }
-        }, 1000);
+//Timer
+startTimer.addEventListener("click", function () {
+    var timerInterval = setInterval(function () {
+        secondsLeft--;
+        timer.textContent = "Time: " + secondsLeft;
+        //When timer reaches 0, tell the user and show game over content
+        if (secondsLeft <= 0) {
+            clearInterval(timerInterval);
+            timer.textContent = "You're out of time!!";
+            welcome.style.display = "none";
+            quiz.style.display = "none";
+            gameOver.style.display = "block";
+            highScore.style.display = "none";
+        //Stop the countdown once all questions have been shown
+        } else if (questionIndex === questions.length) {
+            clearInterval(timerInterval);
+            timer.textContent = "Game Over!!";
+        }
+    }, 1000);
     //Prints first question after start button is pressed
     renderQuiz();
-    });
-//End Timer
+});
 
-
-//Render function prints questions and choices
-function renderQuiz () {
+//Quiz
+function renderQuiz() {
     //Set up HTML to only show quiz content
     welcome.style.display = "none";
     quiz.style.display = "block";
     gameOver.style.display = "none";
-    highScore.style.display = "none"; 
-    
+    highScore.style.display = "none";
+
     //Clear previous content
     quiz.innerHTML = "";
 
@@ -107,92 +102,127 @@ function renderQuiz () {
     questionEl.textContent = currentQuestion;
     quiz.appendChild(questionEl);
 
-    //Create elements for choices and pring them to the screen
+    //Create elements for choices and print them to the screen
     var choices = questions[questionIndex].choices;
-    for (var i = 0; i < choices.length; i++) { 
+    for (var i = 0; i < choices.length; i++) {
         var choicesEl = document.createElement("button");
         choicesEl.setAttribute("class", "btn btn-primary choices");
         quiz.appendChild(choicesEl);
         choicesEl.textContent = choices[i];
         choicesEl.addEventListener("click", (compare));
-    }      
+    }
 }
 
-//Compare function checks that selected answer is correct
-function compare(event) { 
+//Check answer and either end game or load next question
+function compare(event) {
     var element = event.target;
-    if(element.matches("button")) { 
+    if (element.matches("button")) {
         var responseDiv = document.createElement("div");
 
         if (element.textContent == questions[questionIndex].answer) {
-            score ++;
+            score++;
             responseDiv.textContent = "Correct! The answer is: " + questions[questionIndex].answer;
         } else {
             secondsLeft = secondsLeft - penalty;
             responseDiv.textContent = "Incorrect! The correct answer is: " + questions[questionIndex].answer;
         }
     }
-   questionIndex++;
-   
-   if (questionIndex >= questions.length || secondsLeft <= 0) {
-       endGame(); 
-   } else { 
-       renderQuiz ();
-   }
-   quiz.appendChild(responseDiv);
+
+    questionIndex++;
+
+    if (questionIndex >= questions.length || secondsLeft <= 0) {
+        endGame();
+    } else {
+        renderQuiz();
+    }
+    quiz.appendChild(responseDiv);
 }
 
-//Game over function changes display when game is over and collects initials
-function endGame() { 
+var scoresFromStorage = JSON.parse(localStorage.getItem("scores"));
+if (!scoresFromStorage) {
+    scoresFromStorage= [];
+}
+
+//endGame function changes display when game is over
+function endGame() {
     //Set up HTML to only show gameOver content
     welcome.style.display = "none";
     quiz.style.display = "none";
-    gameOver.style.display = "inline-block";
+    gameOver.style.display = "block";
     highScore.style.display = "none";
-    timer.textContent = "";
+
     finalScore.textContent = "End of Quiz. " + "Your score is " + score + "/" + questions.length + "!";
-    submit.addEventListener("click", (function () { 
-       var newInitials = initials.value;
-       var newScore = score;
-       
-       var newStorageEntry = {
-           initials: newInitials,
-           score: newScore
-       };
-
-       scoresFromStorage.push(newStorageEntry);
-       localStorage.setItem("scores", JSON.stringify(scoresFromStorage));
-       console.log(newStorageEntry);
-       console.log(scoresFromStorage);
-       showScores();
-
-    })
-    );
 }
 
+//Collect and store initials
+submit.addEventListener("click", (function () {
+    var newInitials = initials.value;
+    var newScore = score;
+
+    var newStorageEntry = {
+        initials: newInitials,
+        score: newScore
+    };
+
+    scoresFromStorage.push(newStorageEntry);
+
+    localStorage.setItem("scores", JSON.stringify(scoresFromStorage));
+
+    showScores(scoresFromStorage);
+    return scoresFromStorage;
+
+})
+);
+
+
 //showScores function shows the high scores when the button is pressed
-function showScores () {
+function showScores(scoresFromStorage) {
     //Set up HTML to only show Score content
     welcome.style.display = "none";
     quiz.style.display = "none";
     gameOver.style.display = "none";
     highScore.style.display = "block";
+    scoreSection.innerHTML = "";
+    console.log(scoresFromStorage.length);
     //Print high scores
-    for (var i=0; i < scoresFromStorage.length; i++) { 
+
+    for (var i = 0; i < scoresFromStorage.length; i++) {
         var scoreEl = document.createElement("p");
         scoreEl.innerText = scoresFromStorage[i].initials + "'s score is " + scoresFromStorage[i].score;
         scoreSection.appendChild(scoreEl)
     }
-    //When user click go back, the quiz starts over
-    goBack.addEventListener("click", function () {
-        //Set up HTML to only show quiz content
-        welcome.style.display = "block";
-        quiz.style.display = "none";
-        gameOver.style.display = "none";
-        highScore.style.display = "none";
-        //reset variables
-        questionIndex = 0;
-        score = 0;
-        secondsLeft = 60;
-    })
+    //Clear high scores 
+    clearScores.addEventListener("click", function () {
+    localStorage.clear();
+    scoresFromStorage.length = 0;
+    scoreSection.innerHTML = "";
+    console.log(scoresFromStorage.length)
+    showScores(scoresFromStorage)
+    return scoresFromStorage;
+})
 }
+
+
+
+//Start quiz over
+goBack.addEventListener("click", function () {
+    //Set up HTML to only show quiz content
+    welcome.style.display = "block";
+    quiz.style.display = "none";
+    gameOver.style.display = "none";
+    highScore.style.display = "none";
+    //reset variables
+    questionIndex = 0;
+    score = 0;
+    secondsLeft = 60;
+
+})
+
+//View High scores
+viewScores.addEventListener("click", function () {
+    welcome.style.display = "none";
+    quiz.style.display = "none";
+    gameOver.style.display = "none";
+    highScore.style.display = "block";
+    console.log(scoresFromStorage.length)
+})
