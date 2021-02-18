@@ -10,7 +10,7 @@ High scores can be cleared by clicking the "Clear High Scores" button.
 The quiz can be played again by clicking the "Go Back" button.
 
 *Link to Application:* 
-https://jasminekay505.github.io/HW-4-Code-Quiz/
+https://jasminekay505.github.io/Code-Quiz/
 
 *Screenshot of Application:*
 ![image](https://user-images.githubusercontent.com/74380703/105537722-31385000-5ca7-11eb-8efe-17e48061d061.png)
