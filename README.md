@@ -1,4 +1,4 @@
-# HW-4-Code-Quiz
+# Code-Quiz
 This application is a timed multiple-choice code quiz designed to test basic JavaScript knowledge. 
 
 To begin the quiz, click the "Start Quiz" button. A multiple choice question will appear. Click the correct answer. If the incorrect answer is clicked, then 10 seconds is subtracted from the game timer.
