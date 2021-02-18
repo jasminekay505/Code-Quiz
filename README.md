@@ -14,7 +14,7 @@ https://jasminekay505.github.io/Code-Quiz/
 
 # Technologies Used
   * HTML
-  * CSS
+  * CSS (Bootstrap)
   * JavaScript
   * WebAPIs
 
